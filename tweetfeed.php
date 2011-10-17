@@ -1,6 +1,6 @@
 <?php
 /* TweetFeeder */
-/* Build 001 - 16/10/2011 */
+/* Build 002 - 16/10/2011 */
 /* By Jigsaw Spain */
 
 /* Usage */
@@ -26,7 +26,6 @@
    #twfeed ul li a {} // The link to teh Tweet
    
  */
-
 
 function tweetfeed($twitter_username)
 // $twitter_username > Username to feed from Twitter
@@ -79,37 +78,55 @@ function tweetfeed($twitter_username)
 			$time_diff = time()-strtotime($tweet['created_at']);
 			if ($time_diff>=2678400)
 			{
-				$time = 'over a month ago';
+				$time = 'on '.date('d M Y', strtotime($tweet['created_at']));
 			}
 			elseif ($time_diff>=604800)
 			{
-			if ((int)($time_diff/604800)==1)
+				$weeks = (int)($time_diff/604800);
+				if ($weeks==1)
 				{
 					$time = 'last week';
 				}
 				else
 				{
-					$time = (int)($time_diff/604800).' weeks ago';
+					$time = $weeks.' weeks ago';
 				}
 			}
 			elseif ($time_diff>=86400)
 			{
-				if ((int)($time_diff/86400)==1)
+				$days = (int)($time_diff/86400);
+				if ($days == 1)
 				{
 					$time = 'yesterday';
 				}
 				else
 				{
-					$time = (int)($time_diff/86400).' days ago';
+					$time = $days.' days ago';
 				}
 			}
 			elseif ($time_diff>=3600)
 			{
-				$time = 'about '.(int)($time_dif/3600).' hour(s) ago';
+				$hours = (int)($time_diff/3600);
+				if ($hours == 1)
+				{
+					$time = 'about '. $hours .' hour ago';
+				}
+				else
+				{
+					$time = 'about '. $hours .' hours ago';
+				}
 			}
 			elseif ($time_diff>=60)
 			{
-				$time = 'about '.(int)($time_diff/60).' minute(s) ago';
+				$minutes = (int)($time_diff/60);
+				if ($minutes == 1)
+				{
+					$time = 'about '. $minutes .' minute ago';
+				}
+				else
+				{
+					$time = 'about '. $minutes .' minutes ago';
+				}
 			}
 			else
 			{

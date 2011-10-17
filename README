@@ -1,0 +1,54 @@
+*************************
+* TweetFeed - Build 001 *
+*    By Jigsaw Spain    *
+*************************
+
+Introduction
+------------
+
+"If you want a job doing well, hire a programmer." - Elliott Bristow 2011
+
+I got fed up with downloading scripts for feeding Twitter Tweets to my (and clients') websites, only to find out that they worked for a few days and then bombed out... so I decided to make my own.
+
+The premise is very simple:
+1) Read Twitter feed from their XML feed
+2) Compile to HTML format
+3) Display
+
+And as you will see the code is quite simple too (at this stage). I wanted to keep it simple and then build on it later if needed, after all, the simpler it is, the less there is to break... right?
+
+
+Installation
+------------
+
+Setup is very simple, but varies slightly depending on your php.ini settings. If you already have 'allow_url_fopen' set to true in your php.ini... ignore that step:
+
+1) Upload tweetfeed.php to your web server
+2) If you have 'allow_url_fopen' set to false in your php.ini file, or if you don't know what it is set to, upload the php.ini file included to your domain's root folder
+   NOTE: If you ALREADY have a file called php.ini in your root folder, add or edit the 'allow_url_fopen' to match the one in the php.ini file provided.
+3) Where you want the feed to appear on your page, insert the following code:
+   
+   <?php
+   include('tweetfeed.php');
+   tweetfeed('Your_Twitter_Username');
+   ?>
+   
+   Replace 'Your_Twitter_Username' with... um... your twitter username, but make sure you keep the apostrophes ' '.
+4) Try It!
+5) Report any issues or suggestions on our GitHub page at http://github.com/jigsawspain/TweetFeed
+
+Customisation
+-------------
+
+The script outputs a DIV called 'twfeed' containing an HTML un-numbered list. To edit the appearance of the feed using CSS, use the following CSS hooks:
+
+#twfeed {}         > The main wrapper for the feed. Use this to edit margins, padding etc.
+#twfeed ul {}      > The wrapper around the Tweets. Use this to edit the indents and bullet markers.
+#twfeed ul li {}   > Each individual tweet. Use this to customise the appearance of tweets themselves.
+#twfeed ul li a {} > The link to the tweet on Twitter. Use this to customise the link appearance.
+                     Note: You can also use a:hover, a:visited and a:active.
+
+Get Involved
+------------
+
+Feel free to Fork the code, it is offered on a GNU General Public License v3.0 licence. Please maintain credit and request a push-back of any changes you make.

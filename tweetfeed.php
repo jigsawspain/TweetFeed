@@ -1,6 +1,6 @@
 <?php
 /* TweetFeeder */
-/* Build 002 - 16/10/2011 */
+/* Build 003 - 16/10/2011 */
 /* By Jigsaw Spain */
 
 /* Usage */
@@ -9,8 +9,21 @@
    1) Upload script to server
    2) Include in webpage
       e.g. include('path/to/tweettest.php');
-   3) Add function using the desires twitter username
-      e.g. tweetfeed('jigsawspain');
+   3) Add function using the desired twitter username and attributes
+      e.g. tweetfeed('jigsawspain', 5, true);
+
+   ATTRIBUTES
+   ==========
+   There is one required attribute and two optionl attributes available.
+ 
+   $twitter_username (REQUIRED) - the username to produce the feed from
+   $tweet_count (OPTIONAL) - how many tweets to show. (Max 20)
+     0 (Default) - Show ALL available tweets
+     1, 2, 3 etc - Show 1, 2 or 3 tweets only
+   $show_exact_time (OPTIONAL) - Whether or not to show exact time/date of all tweets
+     false (Default) - show "1 minute ago"
+     true - show '01/01/2011 at 12:00
+     
 	  
 */
 
@@ -27,8 +40,12 @@
    
  */
 
-function tweetfeed($twitter_username)
-// $twitter_username > Username to feed from Twitter
+function tweetfeed($twitter_username, $tweet_count = 0, $show_exact_time = false)
+/* 
+ * $twitter_username > (REQUIRED) Username to feed from Twitter
+ * $tweet_count > (OPTIONAL) How many tweets to show. 0 = all (Max 20)
+ * $show_exact_time > (OPTIONAL) Show exact time/date of tweet, false = show time since post
+ */
 {
 
 	/* Construct Feed Array */
@@ -63,6 +80,9 @@ function tweetfeed($twitter_username)
 			}
 		}
 		$i++;
+		if ($i == $tweet_count) {
+			break;
+		}
 	}
 
 	if (count($tweet_array)!=0)
@@ -74,69 +94,76 @@ function tweetfeed($twitter_username)
 		<ul>';
 		foreach ($tweet_array as $tweet)
 		{
+			if ($show_exact_time)
+			// Get Exact Time
+			{
+				$time = 'on '.date('d M Y', strtotime($tweet['created_at'])).' at '.date('H:i', strtotime($tweet['created_at']));
+			} else
 			// Get Time Difference
-			$time_diff = time()-strtotime($tweet['created_at']);
-			if ($time_diff>=2678400)
 			{
-				$time = 'on '.date('d M Y', strtotime($tweet['created_at']));
-			}
-			elseif ($time_diff>=604800)
-			{
-				$weeks = (int)($time_diff/604800);
-				if ($weeks==1)
+				$time_diff = time()-strtotime($tweet['created_at']);
+				if ($time_diff>=2678400)
 				{
-					$time = 'last week';
+					$time = 'on '.date('d M Y', strtotime($tweet['created_at']));
+				}
+				elseif ($time_diff>=604800)
+				{
+					$weeks = (int)($time_diff/604800);
+					if ($weeks==1)
+					{
+						$time = 'last week';
+					}
+					else
+					{
+						$time = $weeks.' weeks ago';
+					}
+				}
+				elseif ($time_diff>=86400)
+				{
+					$days = (int)($time_diff/86400);
+					if ($days == 1)
+					{
+						$time = 'yesterday';
+					}
+					else
+					{
+						$time = $days.' days ago';
+					}
+				}
+				elseif ($time_diff>=3600)
+				{
+					$hours = (int)($time_diff/3600);
+					if ($hours == 1)
+					{
+						$time = 'about '. $hours .' hour ago';
+					}
+					else
+					{
+						$time = 'about '. $hours .' hours ago';
+					}
+				}
+				elseif ($time_diff>=60)
+				{
+					$minutes = (int)($time_diff/60);
+					if ($minutes == 1)
+					{
+						$time = 'about '. $minutes .' minute ago';
+					}
+					else
+					{
+						$time = 'about '. $minutes .' minutes ago';
+					}
 				}
 				else
 				{
-					$time = $weeks.' weeks ago';
-				}
-			}
-			elseif ($time_diff>=86400)
-			{
-				$days = (int)($time_diff/86400);
-				if ($days == 1)
-				{
-					$time = 'yesterday';
-				}
-				else
-				{
-					$time = $days.' days ago';
-				}
-			}
-			elseif ($time_diff>=3600)
-			{
-				$hours = (int)($time_diff/3600);
-				if ($hours == 1)
-				{
-					$time = 'about '. $hours .' hour ago';
-				}
-				else
-				{
-					$time = 'about '. $hours .' hours ago';
-				}
-			}
-			elseif ($time_diff>=60)
-			{
-				$minutes = (int)($time_diff/60);
-				if ($minutes == 1)
-				{
-					$time = 'about '. $minutes .' minute ago';
-				}
-				else
-				{
-					$time = 'about '. $minutes .' minutes ago';
-				}
-			}
-			else
-			{
-				if ($time_diff <= 10)
-				{
-					$time = 'just now';
-				}
-				else
-				{
-					$time = $time_diff.' seconds ago';
+					if ($time_diff <= 10)
+					{
+						$time = 'just now';
+					}
+					else
+					{
+						$time = $time_diff.' seconds ago';
+					}
 				}
 			}
 			

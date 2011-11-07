@@ -4,5 +4,5 @@
 /* Usage Example */
 
 include('tweetfeed.php');
-tweetfeed('jigsawspain');
+tweetfeed('jigsawspain',0, true);
 ?>
